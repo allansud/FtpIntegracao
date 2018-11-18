@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.com.ftpintegration.business.FtpBusiness;
 import br.com.ftpintegration.constant.Const;
 import br.com.ftpintegration.domain.Filmes;
 
@@ -40,36 +41,31 @@ public class HomeController {
 		return ret;
 	}
 
-	@RequestMapping(value = "/listarFilmes")
+	@RequestMapping(value = "/")
 	public ModelAndView listaFilmes() {
 
 		ModelAndView mv = new ModelAndView("filmes");
 		String ftpUrl = "";
-		ftpUrl = String.format(Const.FTP_URL, Const.USER, Const.PASS, Const.HOST, Const.DIR_PATH);
+		//String ftpUrl_2 = "";
+		
+		ftpUrl = String.format(Const.FTP_URL_FILMES, Const.USER, Const.PASS, Const.HOST, Const.DIR_PATH);
+		//ftpUrl_2 = String.format(Const.FTP_URL_SERIADOS, Const.USER, Const.PASS, Const.HOST, Const.DIR_PATH);
 		System.out.println("URL: " + ftpUrl);
 
 		try {
-			URL url = new URL(ftpUrl);
-			URLConnection conn = url.openConnection();
-			InputStream inputStream = conn.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-			String line = null;
+			
 			ArrayList<Filmes> listaNomes = new ArrayList<>();
-
-			System.out.println("--- START ---");
-			while ((line = reader.readLine()) != null) {
+			ArrayList<String> nameList = FtpBusiness.listFilesFromFtp(ftpUrl);		
+			
+			for (String s : nameList) {
 				Filmes f = new Filmes();
-				f.setNome(line);
+				f.setNome(s);
 				listaNomes.add(f);
-				System.out.println(line);
 			}
-			System.out.println("--- END ---");
-
+			
 			mv.addObject("listaFilmes", listaNomes);
-			inputStream.close();
 
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
