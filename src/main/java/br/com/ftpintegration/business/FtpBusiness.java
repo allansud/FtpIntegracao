@@ -12,12 +12,13 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
 import br.com.ftpintegration.constant.Const;
+import br.com.ftpintegration.domain.Filmes;
+import br.com.ftpintegration.domain.Seriados;
 
 public class FtpBusiness {
 	
 	public static BufferedReader getFtpConteudo(String ftpUrl) {
-		
-		
+				
 		InputStream inputStream = null;
 		try {
 			URL url = new URL(ftpUrl);
@@ -32,10 +33,11 @@ public class FtpBusiness {
 		return reader;
 	}
 	
-	public static ArrayList<String> listFilesFromFtp(String url) {
+	public static ArrayList<Filmes> listFilesFromFtp(String url) {
 		
 		FTPClient ftpClient = new FTPClient();
-		ArrayList<String> lista = new ArrayList<>();
+		ftpClient.setControlEncoding("UTF-8");
+		ArrayList<Filmes> lista = new ArrayList<>();
 		
 		try {
 			
@@ -44,7 +46,10 @@ public class FtpBusiness {
 						
 			FTPFile[] files = ftpClient.listFiles(Const.DIR_PATH);
 			for (FTPFile f : files) {
-				lista.add(f.getName());
+				Filmes fi = new Filmes();
+				fi.setNome(f.getName());
+				fi.setTamanho(f.getSize());
+				lista.add(fi);
 			}			
             
 		} catch (Exception e) {
@@ -60,6 +65,43 @@ public class FtpBusiness {
 				}
 			}
 		}
+		
+		return lista;
+	}
+	
+	public static ArrayList<Seriados> listSeriadosFromFtp(String url) {
+		
+		FTPClient ftpClient = new FTPClient();
+		ftpClient.setControlEncoding("UTF-8");
+		ArrayList<Seriados> lista = new ArrayList<>();
+		
+		try {
+			
+			ftpClient.connect(Const.HOST_2, 82);      
+			ftpClient.login(Const.USER, Const.PASS);
+						
+			FTPFile[] files = ftpClient.listFiles(Const.DIR_PATH_2);
+			for (FTPFile f : files) {
+				Seriados s = new Seriados();
+				s.setNome(f.getName());
+				s.setTamanho(f.getSize());
+				lista.add(s);
+			}			
+            
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(ftpClient.isConnected()) {
+				try {
+					ftpClient.logout();
+					ftpClient.disconnect();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		return lista;
 	}
 }

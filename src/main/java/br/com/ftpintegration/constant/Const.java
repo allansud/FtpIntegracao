@@ -9,4 +9,5 @@ public class Const {
     public static String USER = "Allan";
     public static String PASS = "21293811";
     public static String DIR_PATH = "/Filmes";
+    public static String DIR_PATH_2 = "/Seriados";
 }

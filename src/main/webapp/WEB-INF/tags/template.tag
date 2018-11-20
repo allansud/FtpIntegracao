@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title> FtpIntegration </title>
+		<title> Lista de Filmes </title>
 
 		<c:url value="/" var="baseUrl" />
 		<c:set value="${fn:length(baseUrl)}" var="baseUrlLen" />
@@ -16,9 +16,11 @@
     	<link rel="stylesheet" type="text/css" media="all" href="${baseUrl}/resources/bootstrap/css/bootstrap-responsive.css"/>
 		<link rel="stylesheet" type="text/css" media="all" href="${baseUrl}/resources/style.css"/>
 		<script type="text/javascript" src="${baseUrl}/resources/project.js" ></script>
+		<script type="text/javascript" src="${baseUrl}/resources/bootstrap/js/jquery.js" ></script>
+        <script type="text/javascript" src="${baseUrl}/resources/bootstrap/js/bootstrap.js" ></script>
 		<jsp:invoke fragment="head"/>
 	</head>
-	<body>
-		<jsp:doBody />
-	</body>
+<body>
+	<jsp:doBody />
+</body>
 </html>

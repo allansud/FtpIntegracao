@@ -1,14 +1,11 @@
 package br.com.ftpintegration.controller;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -26,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import br.com.ftpintegration.business.FtpBusiness;
 import br.com.ftpintegration.constant.Const;
 import br.com.ftpintegration.domain.Filmes;
+import br.com.ftpintegration.domain.Seriados;
 
 @Controller
 public class HomeController {
@@ -46,24 +44,19 @@ public class HomeController {
 
 		ModelAndView mv = new ModelAndView("filmes");
 		String ftpUrl = "";
-		//String ftpUrl_2 = "";
+		String ftpUrl_2 = "";
 		
 		ftpUrl = String.format(Const.FTP_URL_FILMES, Const.USER, Const.PASS, Const.HOST, Const.DIR_PATH);
-		//ftpUrl_2 = String.format(Const.FTP_URL_SERIADOS, Const.USER, Const.PASS, Const.HOST, Const.DIR_PATH);
+		ftpUrl_2 = String.format(Const.FTP_URL_SERIADOS, Const.USER, Const.PASS, Const.HOST, Const.DIR_PATH);
 		System.out.println("URL: " + ftpUrl);
 
 		try {
 			
-			ArrayList<Filmes> listaNomes = new ArrayList<>();
-			ArrayList<String> nameList = FtpBusiness.listFilesFromFtp(ftpUrl);		
-			
-			for (String s : nameList) {
-				Filmes f = new Filmes();
-				f.setNome(s);
-				listaNomes.add(f);
-			}
+			ArrayList<Filmes> listaNomes = FtpBusiness.listFilesFromFtp(ftpUrl);		
+			ArrayList<Seriados> listaSeriados = FtpBusiness.listSeriadosFromFtp(ftpUrl_2);
 			
 			mv.addObject("listaFilmes", listaNomes);
+			mv.addObject("listSeriados", listaSeriados);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
